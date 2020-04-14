@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>07.vue中样式-class</title>
+    <script src="lib/vue.min.js"></script>
+    <style>
+        .red{
+            color: red;
+        }
+        .thin{
+            font-weight: 200;
+        }
+        .italic{
+            font-style: italic;
+        }
+        .active{
+            letter-spacing: 0.5em;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="app">
+        <!--第一种方式，直接传递数组，这里的class需要v-bind作绑定-->
+        <h1 :class="['thin']">哒哒哒哒哒的H1</h1>
+        <!--第二种方式，在数组中使用三元表达式-->
+        <h1 :class="['thin','italic',flag?'active':'']">哒哒哒哒哒的H1</h1>
+        <!--第三种方式，在数组中使用对象代替三元表达式-->
+        <h1 :class="['thin','italic',{'active':flag}]">哒哒哒哒哒的H1</h1>
+        <!--为class使用v-bind的时候，对象属性是类名，引号可带可不带-->
+        <h1 :class="{active:true, thin:true, italic:true, red:true}">哒哒哒哒哒的H1</h1>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data:{
+                flag:true
+            },
+            methods:{},
+        });
+    </script>
+
+</body>
+</html>

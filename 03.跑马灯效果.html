@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>03.跑马灯</title>
+    <!-- 1 导入包-->
+    <script src="lib/vue.min.js"></script>
+</head>
+<body>
+    <!-- 2 创建一个可控制的区域-->
+    <div id="app">
+        <input type="button" value="浪起来" @click="lang">
+        <input type="button" value="低调" @click="stop">
+
+
+        <h4>{{ msg }}</h4>
+    </div>
+    <script>
+        //在vue实例中，想要调用methods的方法或者获取data里的数据，必须通过this.属性名，或者this.方法名来访问。这里的this表示当前的实例对象
+        var vm = new Vue({
+            el: '#app',
+            data:{
+              msg:'猥琐发育，别浪～～！', intervalID:null
+            },
+            methods:{
+                lang(){
+                    //console.log(this.msg)
+                    if(this.intervalID !=null) return;
+                    this.intervalID = setInterval( () => {
+                        var start = this.msg.substring(0,1)
+                        var end = this.msg.substring(1)
+                        //重新拼接字符串，并赋值给this.msg
+                        this.msg = end + start
+                    },400)
+
+
+                    //vm实例中，会监听自己身上data数据的改变，只要数据改变，就自动把data中的数据同步到页面中。（好处:只需要关心数据，不需要
+                    // 关心具体页面
+                },
+                stop(){
+                    clearInterval(this.intervalID)
+                    //每当停止需要把intervalID设为null
+                    this.intervalID = null;
+                }
+
+            }
+        })
+        //1. 给button绑定点击事件，
+        //2. 在事件函数中写相关的业务逻辑：拿到字符串，然后调用substring方法进行截取操作，把第一个字符截取出来放到最后的位置；
+        //3. 为实现自动截取功能，需要把步骤2的代码放到定时器中。
+
+    </script>
+</body>
+</html>

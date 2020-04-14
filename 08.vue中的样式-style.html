@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>07.vue中样式-class</title>
+    <script src="lib/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--对象就是无序键值对的集合-->
+    <h1 :style="[styleobj1,styleobj2]">哒哒哒哒哒的H1</h1>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data:{
+            styleobj1:{color:'red'},
+            styleobj2:{'font-style':'italic'},
+        },
+        methods:{},
+    });
+</script>
+
+</body>
+</html>

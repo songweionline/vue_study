@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>01.基本代码</title>
+    <script src="lib/vue.min.js"></script>
+</head>
+<body>
+    <!-- new的vue实例，控制id为app下的所有内容,就是MVVM中的V-->
+    <div id="app">
+        <p>{{ msg }}</p>
+    </div>
+    <script>
+        //当导入包以后，浏览器的内存中就多了一个Vue构造函数
+        //new出来的vm就是MVVM中的VM调度者
+        var vm = new Vue({
+            el: '#app',   //表示当前new的vue实例要控制页面上的哪个区域。
+            data: { //data属性中存放的是el中用到的数据，也就是MVVM里的M。
+                msg: '欢迎学习' //通过vue提供的指令，很方便的就能把数据渲染到页面上。不再手动操作dom元素。
+                // 前段的VUE之类的框架不提倡手动操作dom元素。
+            }
+        })
+    </script>
+</body>
+</html>

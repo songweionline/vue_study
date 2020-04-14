@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>04.事件修饰符</title>
+    <script src="lib/vue.min.js"></script>
+    <style>
+        .inner{
+            height: 150px;
+            background: pink;
+        }
+        .outer{
+            padding: 40px;
+            background: aquamarine;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+            <!-- 使用.capture触发捕获机制-->
+        <div class="inner" @click.capture="div1Handler">
+            <!-- 使用.stop阻止冒泡 -->
+            <input type="button" value="戳我" @click.stop="btnHandler">
+        </div>
+        <!--.prevent阻止默认事件 -->
+        <a href="http://www.baidu.com" @click.prevent="linkclick">去百度</a>
+
+        <!--.self 实现只有点击当前元素才会触发事件-->
+        <div class="inner" @click.self="div1Handler">
+            <input type="button" value="戳我" @click="btnHandler">
+        </div>
+        <!--.once只触发一次事件 -->
+        <a href="http://www.baidu.com" @click.once.prevent="linkclick">去百度</a>
+        <!--演示.self和stop的区别 self只会阻止自己冒泡的触发，不会真正阻止冒泡。-->
+        <div class="outer" @click="div2Handler">
+            <div class="inner" @click.self="div1Handler">
+                <input type="button" value="戳我" @click="btnHandler">
+            </div>
+        </div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            methods:{
+                div1Handler(){
+                    console.log('触发inner点击事件');
+                },
+                btnHandler(){
+                    console.log('触发按钮点击事件');
+                },
+                linkclick(){
+                    console.log('触发连接点击事件');
+                },
+                div2Handler(){
+                    console.log('触发outdiv点击事件');
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>
