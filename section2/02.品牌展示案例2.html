@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>01.品牌展示案例</title>
+    <title>02.品牌展示案例2</title>
     <script src="../lib/vue.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap.min.css">
     <!--是否需要jQuery？不需要-->
@@ -31,29 +31,55 @@
     </div>
     <table class="table table-bordered table-hover table-striped">
         <thead>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>Ctime</th>
-                <th>Operation</th>
-            </tr>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>Ctime</th>
+            <th>Operation</th>
+        </tr>
         </thead>
         <tbody>
         <!-- 之前的v-for的数据都是从data中过来的-->
         <!-- 现在定义了一个search方法，同时把搜索的结果传给search方法-->
         <!-- 在search方法内部，通过for循环，把所有符合搜索关键字的数据保存到新数组中在返回-->
-            <tr v-for="item in search(keywords)" :key="item">
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.ctime }}</td>
-                <td>
-                    <a href="" @click.prevent="del(item.id)">删除</a>
-                </td>
-            </tr>
+        <tr v-for="item in search(keywords)" :key="item">
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <!--过滤器调用格式 {name | nameope}} 通过vue.filter()定义过滤器-->
+
+            <td>{{ item.ctime | dateFormat() }}</td>
+            <td>
+                <a href="" @click.prevent="del(item.id)">删除</a>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>
+<div id="app2">
+    <h3>{{ dt | dateFormat }}</h3>
+</div>
 <script>
+    //全局过滤器进行时间格式化,所有的vm实例都可以调用
+    Vue.filter('dateFormat', function (datestr, pattern='') {
+        //根据给定时间字符串，得到特定的格式
+        var dt = new Date(datestr)
+        //yyyy-mm-dd
+        var y = dt.getFullYear()
+        var m = dt.getMonth() + 1
+        var d = dt.getDate()
+        //return y + '-' +m + '-' + d
+
+        if(pattern && pattern.toLowerCase() === 'yyyy-mm-dd'){
+            return `${y}-${m}-${d}`
+        }else {
+            var hh = dt.getHours()
+            var mm = dt.getMinutes()
+            var ss = dt.getSeconds()
+
+            return `${y}-${m}-${d} \xa0\xa0\xa0\xa0 ${hh}:${mm}:${ss}`
+        }
+    })
+
     var vm = new Vue({
         el:'#app',
         data:{
@@ -112,6 +138,37 @@
             },
         },
     })
+
+    //自定义私有过滤器
+    var vm2 = new Vue({
+        el:'#app2',
+        data:{
+            dt: new Date()
+        },
+        methods: {},
+        filters: {//定义私有过滤器，过滤器有两个条件【过滤器名称和处理函数】，过滤器调用的时候采用就近原则。
+            dateFormat:function (dateStr, pattern= '') {
+                var dt = new Date(dateStr)
+                //yyyy-mm-dd
+                var y = dt.getFullYear()
+                var m = dt.getMonth() + 1
+                var d = dt.getDate()
+                //return y + '-' +m + '-' + d
+
+                if(pattern && pattern.toLowerCase() === 'yyyy-mm-dd'){
+                    return `${y}-${m}-${d}`
+                }else {
+                    var hh = dt.getHours()
+                    var mm = dt.getMinutes()
+                    var ss = dt.getSeconds()
+
+                    return `${y}-${m}-${d} \xa0\xa0\xa0\xa0 ${hh}:${mm}:${ss} ~~~~~`
+                }
+            }
+        },
+    })
+
+
 </script>
 </body>
 </html>
