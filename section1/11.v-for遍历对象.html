@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>11.v-for遍历对象</title>
+    <script src="../lib/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--遍历对象身上的键值对的时候，除了有val，key，还有第三个位置为索引-->
+    <p v-for="(val, key, i) in user">{{val}}--{{key}}--{{i}}</p>
+</div>
+<script>
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            user:{
+                id:1,
+                name:'tony',
+                gender:'man'
+            }
+        },
+        methods:{}
+    })
+</script>
+</body>
+</html>
