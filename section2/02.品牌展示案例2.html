@@ -19,13 +19,14 @@
                 <input type="text" class="form-control" v-model="id">
             </label>
             <label>
+                <!--@keyup按键修饰符，可以监听键盘动作。　.enter,.table,.space。还可以使用键盘编码值实现全键盘监听,或者自定义按键修饰符-->
                 name:
-                <input type="text" class="form-control" v-model="name">
+                <input type="text" class="form-control" v-model="name" @keyup.enter="add">
             </label>
             <!-- 在vue中，使用事件绑定机制，为元素指定方法后，加括号可以传参-->
             <input type="button" value="添加" class="btn btn-primary" @click="add">
             <label>
-                搜索：<input type="text" class="form-control" v-model="keywords">
+                搜索：<input type="text" class="form-control" v-model="keywords" id="search" v-focus v-color="'blue'">
             </label>
         </div>
     </div>
@@ -56,7 +57,7 @@
     </table>
 </div>
 <div id="app2">
-    <h3>{{ dt | dateFormat }}</h3>
+    <h3 v-color="'pink'" v-fontweight="900" v-fontsize="50">{{ dt | dateFormat }}</h3>
 </div>
 <script>
     //全局过滤器进行时间格式化,所有的vm实例都可以调用
@@ -79,7 +80,40 @@
             return `${y}-${m}-${d} \xa0\xa0\xa0\xa0 ${hh}:${mm}:${ss}`
         }
     })
+    //自定义全局按键修饰符
+    Vue.config.keyCodes.f2 = 113
+    //使用 Vue.direction()定义全局指令，在定义的时候，指令名称不需要加v-前缀,调用时必须加v-前缀。
+    //参数2，是一个对象，可以在特定阶段执行相关操作。
 
+    Vue.directive('focus',{
+        bind: function (el){//每当指令绑定到元素的时候会立即执行bind函数。只执行一次。
+            //注意：在每个函数中，第一个参数永远是el，表示被绑定指令的元素。这个el参数是一个原生的js对象。
+            //在元素刚绑定指令的时候，还没插入dom，这时候调用focus方法没有作用。只有插入dom之后才能获取焦点。
+            //el.focus()
+        },
+        inserted: function (el) {//元素插入到dom中的时候执行inserted函数。
+            el.focus()
+        },
+        updated: function () {//当Vnode更新的时候会执行update，可能会触发多次。
+
+        }
+    } )
+
+    Vue.directive('color',{
+        //和js行为有关的操作，最好在inserted中执行。
+        //和样式相关的，可以放在bind中。
+        bind: function (el, binding) {
+            //样式，只要通过指令绑定给元素，不管元素有没有插入到页面中，这个元素肯定有一个内联样式。
+            //将来元素肯定会显示到页面中。这时候浏览器的渲染引擎必然会解析样式。
+            el.style.color = binding.value
+        },
+        inserted: function () {
+
+        },
+        updated: function () {
+
+        }
+    })
     var vm = new Vue({
         el:'#app',
         data:{
@@ -151,23 +185,32 @@
                 var dt = new Date(dateStr)
                 //yyyy-mm-dd
                 var y = dt.getFullYear()
-                var m = dt.getMonth() + 1
-                var d = dt.getDate()
+                var m = (dt.getMonth() + 1).toString().padStart(2, '0')
+                var d = (dt.getDate()).toString().padStart(2, '0')
                 //return y + '-' +m + '-' + d
 
                 if(pattern && pattern.toLowerCase() === 'yyyy-mm-dd'){
                     return `${y}-${m}-${d}`
                 }else {
-                    var hh = dt.getHours()
-                    var mm = dt.getMinutes()
-                    var ss = dt.getSeconds()
+                    var hh = (dt.getHours()).toString().padStart(2, '0')
+                    var mm = (dt.getMinutes()).toString().padStart(2, '0')
+                    var ss = (dt.getSeconds()).toString().padStart(2, '0')
 
                     return `${y}-${m}-${d} \xa0\xa0\xa0\xa0 ${hh}:${mm}:${ss} ~~~~~`
                 }
             }
         },
+        directives:{
+            'fontweight':{
+                bind:function (el, binding) {
+                    el.style.fontWeight=binding.value
+                },
+            },
+            'fontsize': function (el, binding) {//这个fuction等同于把代码写到bind和update中
+                    el.style.fontSize = parseInt(binding.value) + 'px'
+            }
+        }
     })
-
 
 </script>
 </body>
